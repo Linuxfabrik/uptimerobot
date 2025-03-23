@@ -311,8 +311,8 @@ alert_contacts:
 - **Get all monitors with type 2, 4 and 5:**  
   `./utr get monitors --types=2-4-5`
 
-- **The same using user-friendly parameter values:** 
-  ``./utr get monitors --types=keyw-port-beat --statuses=paused-down`
+- **The same using user-friendly parameter values:**  
+  `./utr get monitors --types=keyw-port-beat --statuses=paused-down`
 
 - **Apply Changes from a YAML File:**
   `./utr apply /home/admin/uptime_config.yaml`

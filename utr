@@ -6,14 +6,14 @@
 #          https://www.linuxfabrik.ch/
 # License: The Unlicense, see LICENSE file.
 
-# https://github.com/Linuxfabrik/monitoring-plugins/blob/main/CONTRIBUTING.rst
-
 """See the README for more details.
 """
 
 import argparse  # pylint: disable=C0413
 import os  # pylint: disable=C0413
 import sys  # pylint: disable=C0413
+from datetime import datetime, timedelta
+
 import yaml  # pylint: disable=C0413
 
 import lib.base  # pylint: disable=C0413
@@ -21,7 +21,6 @@ import lib.disk  # pylint: disable=C0413
 import lib.txt  # pylint: disable=C0413
 import lib.uptimerobot  # pylint: disable=C0413
 
-from datetime import datetime, timedelta
 
 
 __author__ = 'Linuxfabrik GmbH, Zurich/Switzerland'
@@ -144,19 +143,19 @@ def unknown_command(args):
 
 
 def get_account_details(args):
-    success, account, rl = lib.uptimerobot.get_account_details({
+    _, account, rl = lib.uptimerobot.get_account_details({
         'api_key': args.API_KEY,
     })
-    acc = account[0]
+    a = account[0]
     msg = 'Account:\n'
-    msg += f'* {acc["down_monitors"]}/{acc["paused_monitors"]}/{acc["up_monitors"]} (down/paused/up), '
-    msg += f'{acc["total_monitors_count"]}/{acc["monitor_limit"]} '
-    msg += f'{lib.txt.pluralize("monitor", acc["monitor_limit"])} used '
-    msg += f'({int(acc["total_monitors_count"]/acc["monitor_limit"] * 100)}%)\n'
-    msg += f'* {acc["sms_credits"]} SMS credits\n'
-    msg += f'* Payment Period: {acc["payment_period"]}, '
-    msg += f'Subscription expires: {acc["subscription_expiry_date"]}\n'
-    msg += f'* Account: {acc["firstname"]} ({acc["email"]})\n\n'
+    msg += f'* {a["down_monitors"]}/{a["paused_monitors"]}/{a["up_monitors"]} (down/paused/up), '
+    msg += f'{a["total_monitors_count"]}/{a["monitor_limit"]} '
+    msg += f'{lib.txt.pluralize("monitor", a["monitor_limit"])} used '
+    msg += f'({int(a["total_monitors_count"]/a["monitor_limit"] * 100)}%)\n'
+    msg += f'* {a["sms_credits"]} SMS credits\n'
+    msg += f'* Payment Period: {a["payment_period"]}, '
+    msg += f'Subscription expires: {a["subscription_expiry_date"]}\n'
+    msg += f'* Account: {a["firstname"]} ({a["email"]})\n\n'
 
     msg += 'Rate Limits:\n'
     msg += f'* {rl["x-ratelimit-remaining"]}/{rl["x-ratelimit-limit"]} calls left in current duration\n'
@@ -614,7 +613,7 @@ def set_monitors(args):
     for key in ('alert_contacts', 'auth_type', 'http_request_details', 'mwindows', 'ssl'):
         set_params.pop(key)
 
-    for i, item in enumerate(monitors):
+    for item in monitors:
         set_params.update({
             'id': item['id'],
         })
@@ -676,4 +675,3 @@ if __name__ == '__main__':
         main()
     except Exception:   # pylint: disable=W0703
         lib.base.cu()
-

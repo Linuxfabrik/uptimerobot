@@ -165,7 +165,7 @@ Attributes specific to this tool:
 * prefix: a string
 * state: 'present' (default) or 'absent'
 
-This example results in two monitors to be created or updated:
+This example results in three monitors to be created or updated:
 
 ```
 monitors:
@@ -200,20 +200,33 @@ monitors:
     state: 'present'
 ```
 
-http_auth_type:
+## Keys and Values
 
-    1: 'basic'
-    2: 'digest'
+`utr get monitors`
 
-http_method:
+Parameter                   | Description
+---------                   | -----------
+`--statuses`                | paused, wait, up, seems_down, down
+`--types`                   | http, keyw, ping, port, beat
 
-    1: 'head'
-    2: 'get'
-    3: 'post'
-    4: 'put'
-    5: 'patch'
-    6: 'delete'
-    7: 'options'
+YAML `monitors:` section:
+
+Key                         | Description
+---                         | -----------
+http_auth_type              | basic, digest
+http_method                 | head, get, post, put, patch, delete, options
+
+
+
+
+
+
+
+
+
+
+
+
 
 keywcase:
 
@@ -246,7 +259,7 @@ type, types:
 
 You may use "end_time" instead of "duration".
 
-If "friendly_name" is ommitted, one is automatically created in the format "type value1,value2 start_time-end_time"
+If "friendly_name" is ommitted, one is automatically created in the format "type value1,value2,... start_time-end_time"
 
 ```
 mwindows:
@@ -314,12 +327,12 @@ alert_contacts:
 - **The same using user-friendly parameter values:**  
   `./utr get monitors --types=keyw-port-beat --statuses=paused-down`
 
-- **Apply Changes from a YAML File:**
+- **Apply Changes from a YAML File:**  
   `./utr apply /home/admin/uptime_config.yaml`
 
-- **Update Monitors Using Command-Line Options - Pausing and resuming some monitors at once:**  
-  `./utr set monitors --search=example --status=pause`
-  `./utr set monitors --search=example --status=start`
+- **Bulk update monitors using command-line options - pausing and resuming some monitors at once:**  
+  `./utr set monitors --search=example --status=paused`
+  `./utr set monitors --search=example --status=up`
 
 
 ## Troubleshooting & Notes

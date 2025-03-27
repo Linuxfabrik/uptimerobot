@@ -1,0 +1,48 @@
+[build-system]
+# In setuptools before version 61.0.0 there is no support for writing the
+# project's packaging metadata in pyproject.toml
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uptimerobot-cli"
+version = "1.0.0.1"
+description = "A CLI tool for UptimeRobot to help manage monitors, MWindows, etc. in a stateful way using a YAML file or by command line actions."
+readme = "README.md"
+authors = [
+    { name = "Linuxfabrik GmbH, Zurich, Switzerland", email = "info@linuxfabrik.ch" },
+]
+license = { file = "LICENSE" }
+classifiers = [
+    "Development Status :: 6 - Mature",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Healthcare Industry",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Manufacturing",
+    "Intended Audience :: Other Audience",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Telecommunications Industry",
+    "License :: OSI Approved :: The Unlicense (Unlicense)",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: System",
+    "Topic :: System :: Monitoring",
+    "Topic :: System :: Networking :: Monitoring",
+]
+keywords = ["cli", "uptimerobot", "monitoring"]
+dependencies = [
+    "linuxfabrik-lib",
+    "pyyaml",
+]
+requires-python = ">=3.9"
+
+[project.urls]
+Homepage = "https://github.com/Linuxfabrik/uptimerobot"
+Documentation = "https://github.com/Linuxfabrik/uptimerobot/blob/master/README.md"
+Source = "https://github.com/Linuxfabrik/uptimerobot"
+Tracker = "https://github.com/Linuxfabrik/uptimerobot/issues"
+Download = "https://github.com/Linuxfabrik/uptimerobot/releases"

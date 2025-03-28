@@ -119,195 +119,9 @@ Additional filtering options can be passed as `--field=value` parameters to targ
 *Other resources (`account`, `alert_contacts`, `mwindows`, `psps`) are marked as "todo" and are not yet implemented.*
 
 
-## The YAML file
+## YAML file for applying updates to the UptimeRobot configuration
 
-A minimal YAML file example:
-
-```
-alertcontacts:
-  - id: 47110815
-    state: 'absent'
-
-mwindows:
-  - type: 'weekly'
-    value: 'mon'
-    start_time: '03:30'
-    end_time: '05:30'
-    status: 'active'
-
-monitors:
-  - url: 'https://www.linuxfabrik.ch'
-    http_method: 'get'
-    interval: 300
-    mwindows:
-      - friendly_name: 'weekly mon 03:30-05:30'
-```
-
-Applying the YAML file to your UptimeRobot account:
-
-    ./utr apply uptimerobot.yml
-
-
-### "monitors"
-
-Used to create, update or delete monitors. See [api/#newMonitorWrap](https://uptimerobot.com/api/#newMonitorWrap) for a list of attributes. Feel free to use user-friendly values instead of the numeric ones documented in the UptimeRobot API.
-
-Required attributes:
-
-* url: Value has to be unique. If there are duplicates, updates to the last monitor found will be applied.
-
-If "friendly_name" is ommitted, one is automatically created in the format "prefix url" (or just "url" if "prefix" is not provided). "http://" and "https://" is always stripped from "friendly_name".
-
-If "type" is ommitted, "type: http" is used.
-
-Attributes specific to this tool:
-
-* prefix: a string
-* state: 'present' (default) or 'absent'
-
-This example results in three monitors to be created or updated:
-
-```
-monitors:
-  # minimal example; results in a monitor named "example.com"
-  - url: 'https://example.com'
-
-  # results in a monitor named "internal www.example.com"
-  - prefix: 'internal'  # tool-specific
-    state: 'present'
-    url: 'https://www.example.com'
-    interval: 30
-
-  # a more complex example
-  - friendly_name: 'https://mon.example.com/icingaweb2/'
-    http_method: 'get'
-    http_auth_type: 'basic'
-    http_username: 'linuxfabrik'
-    http_password: 'linuxfabrik'
-    mwindows:
-      - friendly_name: 'weekly wed 03:30-05:30'
-    alert_contacts:
-      - friendly_name: 'web-hook down event to rocket.chat'
-        threshold: 1
-        recurrence: 0
-      - friendly_name: 'web-hook up event to rocket.chat'
-        threshold: 1
-        recurrence: 0
-      - friendly_name: 'web-hook ssl & domain expiry to rocket.chat'
-        threshold: 1
-        recurrence: 0
-      - id: 4711
-    state: 'present'
-```
-
-## Keys and Values
-
-`utr get monitors`
-
-Parameter                   | Description
----------                   | -----------
-`--statuses`                | paused, wait, up, seems_down, down
-`--types`                   | http, keyw, ping, port, beat
-
-YAML `monitors:` section:
-
-Key                         | Description
----                         | -----------
-http_auth_type              | basic, digest
-http_method                 | head, get, post, put, patch, delete, options
-
-
-
-
-
-
-
-
-
-
-
-
-
-keywcase:
-
-    0: 'cs' (= case-sensitive)
-    1: 'ci' (= case-insentive)
-
-keywtype:
-
-    1: 'exist'
-    2: 'notex'
-
-status, statuses:
-
-    0: 'paused'
-    1: 'wait'
-    2: 'up'
-    8: 'down?'
-    9: 'down'
-
-type, types:
-
-    1: 'http'
-    2: 'keyw'
-    3: 'ping'
-    4: 'port'
-    5: 'beat'
-
-
-### "mwindows"
-
-You may use "end_time" instead of "duration".
-
-If "friendly_name" is ommitted, one is automatically created in the format "type value1,value2,... start_time-end_time"
-
-```
-mwindows:
-  - type: 'daily'
-    start_time: '21:22'
-    end_time: '21:32'
-    status: 'active'
-    state: 'present'
-
-  - type: 'weekly'
-    value: 'mon'
-    start_time: '03:30'
-    end_time: '05:30'
-    status: 'active'
-    state: 'present'
-```
-
-type:
-
-    1: 'once'
-    2: 'daily'
-    3: 'weekly'
-    4: 'monthly'
-
-value:
-
-    1: 'mon'
-    2: 'tue'
-    3: 'wed'
-    4: 'thu'
-    5: 'fri'
-    6: 'sat'
-    7: 'sun'
-
-
-### "alert_contacts"
-
-The API is limited here, so we currently just support deletion of alert contacts.
-
-```
-alert_contacts:
-
-- id: 3654399
-  state: 'absent'
-
-- friendly_name: 'example-group'
-  state: 'absent'
-```
+For the documentation of the YAML format used by the UptimeRobot CLI, please refer to the [YAML syntax documentation](yaml.md).
 
 
 ## Usage examples
@@ -337,14 +151,17 @@ alert_contacts:
 
 ## Troubleshooting & Notes
 
-- **API Limitations:**
+- **API Limitations:**  
   Some operations (e.g., creating or updating alert contacts) are limited by the UptimeRobot API. The tool prints informative messages when certain actions cannot be performed.
 
-- **Field Filters:**
+- **Field Filters:**  
   Additional `--field=value` options can be passed to refine API requests. These filters are processed automatically and applied to the corresponding API calls.
 
-- **Error Handling:**
+- **Error Handling:**  
   In case of errors (such as a missing API key), the tool provides descriptive messages and exits gracefully.
+
+- **Known Limitations:**  
+  Currently this tool does not support managing Status Pages.
 
 
 ## Credits, License

@@ -65,25 +65,9 @@ Each monitor entry defines a check for a website or API endpoint. For a complete
   - `"delete"`
   - `"options"`
 
-- **`post_content_type`**  
-  *Type*: string  
-  Allowed values include:
-  - `"text/html"`
-  - `"content/json"`
-
-- **`post_type`**  
-  *Type*: string  
-  Allowed values include:
-  - `"key"`
-  - `"raw"`
-
 - **`interval`**  
   *Type*: number  
   The interval (in seconds) between consecutive checks.
-
-- **`prefix`** (specific to this tool)  
-  *Type*: string  
-  A short identifier used as part of the monitor’s identification. It is also used to help generate a default friendly name if none is provided.
 
 - **`keyword_case_type`**  
   *Type*: string  
@@ -100,6 +84,22 @@ Each monitor entry defines a check for a website or API endpoint. For a complete
 - **`mwindows`**  
   *Type*: sequence (or a single value)  
   A reference to one or more maintenance windows. These can be provided by specifying either their friendly name (if pre-existing) or their ID. When processing the YAML, the CLI tool matches these values with existing mwindows and associates them with the monitor.
+
+- **`post_content_type`**  
+  *Type*: string  
+  Allowed values include:
+  - `"text/html"`
+  - `"content/json"`
+
+- **`post_type`**  
+  *Type*: string  
+  Allowed values include:
+  - `"key"`
+  - `"raw"`
+
+- **`prefix`** (specific to this tool)  
+  *Type*: string  
+  A short identifier used as part of the monitor’s identification. It is also used to help generate a default friendly name if none is provided.
 
 - **`state`** (specific to this tool)  
   *Type*: string  

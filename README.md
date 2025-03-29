@@ -1,6 +1,6 @@
 # utr - UptimeRobot CLI
 
-`utr` is a CLI tool for UptimeRobot to help manage monitors, MWindows, etc. in a stateful way either by using a YAML file or by command line actions.
+`utr` is a CLI tool for UptimeRobot to help manage monitors, maintenance windows, alert contacts and status pages in a stateful way either by using a YAML file or by command line actions.
 
 
 ## Features
@@ -148,20 +148,18 @@ For the documentation of the YAML format used by the UptimeRobot CLI, please ref
   `./utr set monitors --search=example --status=paused`
   `./utr set monitors --search=example --status=up`
 
+- **Bulk update all status pages**
+  `./utr set psps --status=paused`
+  `./utr set psps --status=active`
+
 
 ## Troubleshooting & Notes
 
 - **API Limitations:**  
   Some operations (e.g., creating or updating alert contacts) are limited by the UptimeRobot API. The tool prints informative messages when certain actions cannot be performed.
 
-- **Field Filters:**  
-  Additional `--field=value` options can be passed to refine API requests. These filters are processed automatically and applied to the corresponding API calls.
-
-- **Error Handling:**  
-  In case of errors (such as a missing API key), the tool provides descriptive messages and exits gracefully.
-
-- **Known Limitations:**  
-  Currently this tool does not support managing Status Pages.
+- **Keys and Values:**  
+  Additional `--key=value` options can be passed to refine API requests. These filters are processed automatically and applied to the corresponding API calls.
 
 
 ## Credits, License

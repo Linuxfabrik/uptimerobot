@@ -346,6 +346,41 @@ def get_alert_contacts(args):
         lib.base.oao(yaml.dump(alert_contacts))
 
 
+def get_psps(args):
+    params = args.field_filters
+    params.update({'api_key': args.API_KEY})
+
+    psps = lib.base.coe(lib.uptimerobot.get_psps(params))
+    print(f'{len(psps)} {lib.txt.pluralize("mwindow", len(psps))} found.')
+    if args.OUTPUT == 'table':
+        for i, item in enumerate(psps):
+            psps[i]['monitors'] = len(item['monitors'])
+        lib.base.oao(lib.base.get_table(
+            sorted(psps, key=lambda item: item['friendly_name']),
+            [
+                'id',
+                'friendly_name',
+                'standard_url',
+                'custom_url',
+                'monitors',
+                'sort',
+                'status',
+            ],
+            header=[
+                'id',
+                'friendly_name',
+                'standard_url',
+                'custom_url',
+                '#mntrs',
+                'sort',
+                'status',
+            ],
+
+        ))
+    else:
+        lib.base.oao(yaml.dump(psps))
+
+
 def parse_and_preprocess_yaml(args):
     # load definitions from file
     ymlfile = lib.base.coe(lib.disk.read_file(args.YMLFILE))
@@ -426,7 +461,7 @@ def apply_monitors(args, targets):
     print(f'Working on {len(targets['monitors'])} {lib.txt.pluralize("monitor", len(targets['monitors']))}.')
     for target_monitor in targets['monitors']:
         # search for existing monitors (unique by URL)
-        # if given, use the id directly, otherwise try to get id by searching for the name first
+        # if given, use the id directly, otherwise try to get id by searching for the url first
         mon_id = target_monitor.get('id')
         if mon_id:
             mon_found = any(str(mon_id) == str(m['id']) for m in actual_monitors)
@@ -439,16 +474,14 @@ def apply_monitors(args, targets):
                 mon_found = False
 
         # search the maintenance windows by friendly_name or ID
-        target_mwindows = target_monitor.get('mwindows', [])
+        # Build a mapping from friendly_name to id for quick lookup in actual_mwindows.
+        friendly_to_mwin_id = {mwindow['friendly_name']: mwindow['id'] for mwindow in actual_mwindows}
+
         mwin_ids = []
-        for target_mwindow in target_mwindows:
-            mwin_id = target_mwindow.get('id')
-            for actual_mwindow in actual_mwindows:
-                if not mwin_id and target_mwindow['friendly_name'] == actual_mwindow['friendly_name']:
-                    mwin_id = actual_mwindow['id']
-                    break
+        for target_mwindow in target_monitor.get('mwindows', []):
+            # Use the mwindow's id if available; otherwise, look it up by friendly_name.
+            mwin_id = target_mwindow.get('id') or friendly_to_mwin_id.get(target_mwindow['friendly_name'])
             if mwin_id:
-                # found a mwindow
                 mwin_ids.append(str(mwin_id))
 
         target_monitor['api_key'] = args.API_KEY
@@ -456,16 +489,14 @@ def apply_monitors(args, targets):
         target_monitor['mwindows'] = '-'.join(mwin_ids)
 
         # search in alert_contacts by friendly_name or ID
-        target_alert_contacts = target_monitor.get('alert_contacts', [])
+        # Create a mapping from friendly_name to id for quick lookup.
+        friendly_to_alert_id = {contact['friendly_name']: contact['id'] for contact in actual_alert_contacts}
+
         alert_ids = []
-        for target_alert_contact in target_alert_contacts:
-            alert_id = target_alert_contact.get('id')
-            for actual_alert_contact in actual_alert_contacts:
-                if not alert_id and target_alert_contact['friendly_name'] == actual_alert_contact['friendly_name']:
-                    alert_id = actual_alert_contact['id']
-                    break
+        for target_alert_contact in target_monitor.get('alert_contacts', []):
+            # Use the alert contact's id if available; otherwise, use the mapping.
+            alert_id = target_alert_contact.get('id') or friendly_to_alert_id.get(target_alert_contact['friendly_name'])
             if alert_id:
-                # found an alert_contact
                 alert_ids.append(f"{alert_id}_{target_alert_contact.get('threshold', 0)}_{target_alert_contact.get('recurrence', 0)}")
 
         target_monitor['api_key'] = args.API_KEY
@@ -588,6 +619,73 @@ def apply_alert_contacts(args, targets):
     return True
 
 
+def apply_psps(args, targets):
+    if not 'psps' in targets:
+        return
+
+    # get all data from uptimerobot
+    actual_psps = lib.base.coe(lib.uptimerobot.get_psps({
+        'api_key': args.API_KEY,
+    }))
+    actual_monitors = lib.base.coe(lib.uptimerobot.get_monitors({
+        'api_key': args.API_KEY,
+    }))
+
+    print(f'Working on {len(targets['psps'])} {lib.txt.pluralize("psp", len(targets['psps']))}.')
+    for target_psp in targets['psps']:
+        # search for existing psps
+        # if given, use the id directly, otherwise try to get id by searching for the name first
+        psp_id = target_psp.get('id')
+        if psp_id:
+            psp_found = any(str(psp_id) == str(p['id']) for p in actual_psps)
+        else:
+            match = next((p for p in actual_psps if p['friendly_name'] == target_psp['friendly_name']), None)
+            if match:
+                psp_id = match['id']
+                psp_found = True
+            else:
+                psp_found = False
+
+        # search the monitors by friendly_name or ID
+        target_monitors = target_psp.get('monitors', [])
+
+        # Build a mapping from friendly_name to id for quick lookup.
+        friendly_to_id = {monitor['friendly_name']: monitor['id'] for monitor in actual_monitors}
+
+        mon_ids = []
+        for target_monitor in target_monitors:
+            try:
+                # Use the monitor's id if available; otherwise, look it up by friendly_name.
+                mon_id = target_monitor.get('id') or friendly_to_id.get(target_monitor['friendly_name'])
+                if mon_id:
+                    mon_ids.append(str(mon_id))
+            except:
+                pass
+
+        target_psp['api_key'] = args.API_KEY
+        target_psp['id'] = psp_id
+        target_psp['monitors'] = '-'.join(mon_ids)
+
+        # create
+        if not psp_found and target_psp.get('state', 'present') == 'present':
+            print(f"Create Status Page `{target_psp['friendly_name']}`... ", end='')
+            success, result = lib.uptimerobot.new_psp(target_psp)
+            print(f'{success}: {result}')
+        # update
+        if psp_found and target_psp.get('state', 'present') == 'present':
+            print(f"Update Status Page `{target_psp['friendly_name']}`... ", end='')
+            success, result = lib.uptimerobot.edit_psp(target_psp)
+            print(f'{success}: {result}')
+        # delete
+        if psp_found and target_psp.get('state', 'present') == 'absent':
+            print(f"Delete Status Page `{target_psp['friendly_name']}`... ", end='')
+            target_psp['id'] = int(psp_id)
+            success, result = lib.uptimerobot.delete_psp(target_psp)
+            print(f'{success}: {result}')
+
+    return True
+
+
 def set_monitors(args):
     params = args.field_filters
     params.update({
@@ -602,6 +700,23 @@ def set_monitors(args):
         })
         print(f"Update Monitor `{item['friendly_name']}`... ", end='')
         success, result = lib.uptimerobot.edit_monitor(params)
+        print(f'{success}: {result}')
+
+
+def set_psps(args):
+    params = args.field_filters
+    params.update({
+        'api_key': args.API_KEY,
+    })
+    psps = lib.base.coe(lib.uptimerobot.get_psps(params))
+
+    print(f'Working on {len(psps)} {lib.txt.pluralize("psp", len(psps))}.')
+    for item in psps:
+        params.update({
+            'id': item['id'],
+        })
+        print(f"Update Status Page `{item['friendly_name']}`... ", end='')
+        success, result = lib.uptimerobot.edit_psp(params)
         print(f'{success}: {result}')
 
 
@@ -633,13 +748,14 @@ def main():
     if args.COMMAND == 'get' and args.RESOURCE == 'mwindows':
         get_mwindows(args)
     if args.COMMAND == 'get' and args.RESOURCE == 'psps':
-        lib.base.oao('todo, not implemented yet')
+        get_psps(args)
 
     if args.COMMAND == 'apply':
         data = parse_and_preprocess_yaml(args)
         apply_alert_contacts(args, data)
         apply_mwindows(args, data)
         apply_monitors(args, data)
+        apply_psps(args, data)
 
     if args.COMMAND == 'set' and args.RESOURCE == 'account':
         lib.base.oao('todo, not implemented yet')
@@ -650,7 +766,7 @@ def main():
     if args.COMMAND == 'set' and args.RESOURCE == 'mwindows':
         lib.base.oao('todo, not implemented yet')
     if args.COMMAND == 'set' and args.RESOURCE == 'psps':
-        lib.base.oao('todo, not implemented yet')
+        set_psps(args)
 
 
 if __name__ == '__main__':

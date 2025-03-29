@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "uptimerobot-cli"
-version = "1.0.0.1"
+version = "1.0.0.8"
 description = "A CLI tool for UptimeRobot to help manage monitors, MWindows, etc. in a stateful way using a YAML file or by command line actions."
 readme = "README.md"
 authors = [
@@ -33,7 +33,7 @@ classifiers = [
     "Topic :: System :: Monitoring",
     "Topic :: System :: Networking :: Monitoring",
 ]
-keywords = ["cli", "uptimerobot", "monitoring"]
+keywords = ["cli", "uptimerobot", "uptimerobot-api", "monitoring"]
 dependencies = [
     "linuxfabrik-lib",
     "pyyaml",

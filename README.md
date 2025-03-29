@@ -38,17 +38,10 @@
 
 ## Installation
 
-1. **Clone or Download the Repository:**  
-   `git clone https://github.com/Linuxfabrik/uptimerobot.git`
-
-2. **Install Dependencies:**  
-  `cd uptimerobot && python3 -m pip install --user --requirement requirements.txt --require-hashes`
-
-3. **Set Up Your API Key:**  
-  Either create a file (by default at `~/.uptimerobot`) containing your [API key](https://dashboard.uptimerobot.com/integrations) or pass it using the `--api_key` flag when running the tool.
-
-4. **Make the Script Executable:**  
-  If necessary, make the script executable: `chmod +x utr`
+```
+pip install uptimerobot-cli
+~/uptimerobot-cli/utr --help
+```
 
 
 ## Usage

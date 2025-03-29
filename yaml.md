@@ -13,6 +13,7 @@ The YAML file can define one or more of the following top-level keys:
 - **monitors**: A list of monitor definitions.
 - **mwindows**: A list of maintenance window definitions.
 - **alert_contacts**: A list of alert contact definitions (note: due to API limitations, creation and update are not supported for alert contacts).
+- **psps**: A list of status pages (note: due to API limitations, you can't provide all the settings the GUI offers).
 
 ---
 
@@ -107,6 +108,12 @@ Each monitor entry defines a check for a website or API endpoint. For a complete
   - `"present"` (default): The monitor should exist (create it if not found, update if it exists).
   - `"absent"`: The monitor should be deleted if it exists.
 
+- **`status`**  
+  *Type*: string  
+  Allowed values include:
+  - `"active"`
+  - `"paused"`
+
 - **`sub_type`**  
   *Type*: string  
   Allowed values include:
@@ -160,6 +167,12 @@ Each maintenance window (mwindow) entry defines a time period during which uptim
   - `"present"` (default): Create or update the mwindow.
   - `"absent"`: Delete the mwindow if it exists.
 
+- **`status`**  
+  *Type*: string  
+  Allowed values include:
+  - `"active"`
+  - `"paused"`
+
 - **`type`**  
   *Type*: string  
   Specifies the recurrence type of the window. Allowed values include:
@@ -186,12 +199,46 @@ Each alert contact entry defines a recipient or method for receiving alerts when
   *Type*: number  
   The ID of the alert contact to be managed.
 
-- **`state`**  
+- **`state`** (specific to this tool)  
   *Type*: string  
   Indicates whether the maintenance window should exist:
   - `"present"` (default): Create or update the alert contact.
   - `"absent"`: Delete the alert contact if it exists.  
   Although supported in the YAML format, note that due to API limitations for alert contacts, `utr` refuses to create or update alert contacts. Only deletion is supported when `state` is set to `"absent"`.
+
+---
+
+## `psps`
+
+* **Type**: sequence of mappings
+
+Each entry defines a status page (PSP). For a complete list of fields, have a look at the [Uptime Robot API documentation](https://uptimerobot.com/api) > newPSP or editPSP.
+
+### Fields
+
+- **`monitors`**  
+  *Type*: sequence of mappings  
+  List of monitors, identified by `friendly_name` or `id`.
+
+- **`sort`**  
+  *Type*: string  
+  Allowed values include:
+  - `"a-z"`
+  - `"z-a"`
+  - `"up-down-paused"`
+  - `"down-up-paused"`
+
+- **`status`**  
+  *Type*: string  
+  Allowed values include:
+  - `"active"`
+  - `"paused"`
+
+- **`state`** (specific to this tool)  
+  *Type*: string  
+  Indicates whether the status page should exist:
+  - `"present"` (default): Create or update the PSP.
+  - `"absent"`: Delete the PSP if it exists.
 
 ---
 
@@ -220,6 +267,17 @@ monitors:
 
   - friendly_name: 'www.google.ch'
     state: 'absent'
+
+psps:
+  - friendly_name: 'Status - Linuxfabrik'
+    custom_url: ''
+    monitors:
+      - friendly_name: '001 www.linuxfabrik.ch'
+      - id: 798324818
+      - id: 793467491
+    sort: 'a-z'
+    status: 'active'
+    state: 'present'
 ```
 
 Applying the YAML file to your UptimeRobot account:

@@ -79,8 +79,8 @@ Each monitor entry defines a check for a website or API endpoint. For a complete
 - **`keyword_type`**  
   *Type*: string  
   Allowed values include:
-  - `"exist"`
-  - `"notex"`
+  - `"exist"`: start incidence when keyword exists
+  - `"notex"`: start incidence when keyword does not exist
 
 - **`mwindows`**  
   *Type*: sequence (or a single value)  

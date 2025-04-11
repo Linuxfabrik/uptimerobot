@@ -11,7 +11,7 @@ and this project does NOT adhere to [Semantic Versioning](https://semver.org/spe
 
 ## [Unreleased]
 
-tbd
+* feat: add "http_method" column
 
 
 ## v1.0.0.8

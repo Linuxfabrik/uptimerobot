@@ -172,6 +172,10 @@ def get_monitors(args):
         params.update({'alert_contacts': 1})
     if 'auth_type' not in params:
         params.update({'auth_type': True})
+    if 'custom_http_headers' not in params:
+        params.update({'custom_http_headers': True})
+    if 'custom_http_statuses' not in params:
+        params.update({'custom_http_statuses': True})
     if 'http_request_details' not in params:
         params.update({'http_request_details': True})
     if 'mwindows' not in params:

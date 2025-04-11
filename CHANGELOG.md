@@ -11,6 +11,7 @@ and this project does NOT adhere to [Semantic Versioning](https://semver.org/spe
 
 ## [Unreleased]
 
+* feat: also return "custom_http_headers" and "custom_http_statuses" for `--output=yaml`
 * feat: add "http_method" column
 
 

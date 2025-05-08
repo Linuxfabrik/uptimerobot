@@ -116,9 +116,9 @@ cryptography==44.0.2 \
     # via
     #   pyspnego
     #   smbprotocol
-linuxfabrik-lib==2.1.1.7 \
-    --hash=sha256:8bd23190e1ca3310655272f6e6f6d9ea394ab8ec82e3aeeba6553931911baeea \
-    --hash=sha256:be3e492a9e6f9a36389e13bcc37cf81a6d4bf95c505fe9af4595f1ba045d1b24
+linuxfabrik-lib==2.1.1.15 \
+    --hash=sha256:4dd907c9a67a6f2e88666f72d5f0459520298d79fd764030e5973294d6040bad \
+    --hash=sha256:f87b21e6f66c3ef3301314f197923724f5cfcbe76e4d61fe6a5fd0044e3fe53c
     # via -r requirements.in
 lxml==5.3.1 \
     --hash=sha256:016b96c58e9a4528219bb563acf1aaaa8bc5452e7651004894a973f03b84ba81 \

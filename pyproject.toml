@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "uptimerobot-cli"
-version = "1.0.0.8"
+version = "1.1.0"
 description = "A CLI tool for UptimeRobot to help manage monitors, MWindows, etc. in a stateful way using a YAML file or by command line actions."
 readme = "README.md"
 authors = [

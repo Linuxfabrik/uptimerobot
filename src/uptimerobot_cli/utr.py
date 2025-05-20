@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8; py-indent-offset: 4 -*-
 #
 # Author:  Linuxfabrik GmbH, Zurich, Switzerland
@@ -466,7 +465,7 @@ def apply_monitors(args, targets):
         'api_key': args.API_KEY,
     }))
 
-    print(f'Working on {len(targets['monitors'])} {lib.txt.pluralize("monitor", len(targets['monitors']))}.')
+    print(f'Working on {len(targets["monitors"])} {lib.txt.pluralize("monitor", len(targets["monitors"]))}.')
     for target_monitor in targets['monitors']:
         # search for existing monitors (unique by URL)
         # if given, use the id directly, otherwise try to get id by searching for the url first
@@ -541,7 +540,7 @@ def apply_mwindows(args, targets):
         'api_key': args.API_KEY,
     }))
 
-    print(f'Working on {len(targets['mwindows'])} {lib.txt.pluralize("mwindow", len(targets['mwindows']))}.')
+    print(f'Working on {len(targets["mwindows"])} {lib.txt.pluralize("mwindow", len(targets["mwindows"]))}.')
     for target_mwindow in targets['mwindows']:
         # search for existing monitors
         # if given, use the id directly, otherwise try to get id by searching for
@@ -589,7 +588,7 @@ def apply_alert_contacts(args, targets):
         'api_key': args.API_KEY,
     }))
 
-    print(f'Working on {len(targets['alert_contacts'])} {lib.txt.pluralize("alertcontact", len(targets['alert_contacts']))}.')
+    print(f'Working on {len(targets["alert_contacts"])} {lib.txt.pluralize("alertcontact", len(targets["alert_contacts"]))}.')
     for target_alert_contact in targets['alert_contacts']:
         # search for existing monitors
         # if given, use the id directly, otherwise try to get id by searching for
@@ -639,7 +638,7 @@ def apply_psps(args, targets):
         'api_key': args.API_KEY,
     }))
 
-    print(f'Working on {len(targets['psps'])} {lib.txt.pluralize("psp", len(targets['psps']))}.')
+    print(f'Working on {len(targets["psps"])} {lib.txt.pluralize("psp", len(targets["psps"]))}.')
     for target_psp in targets['psps']:
         # search for existing psps
         # if given, use the id directly, otherwise try to get id by searching for the name first

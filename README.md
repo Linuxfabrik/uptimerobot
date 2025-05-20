@@ -40,7 +40,7 @@
 
 ```
 pip install uptimerobot-cli
-~/uptimerobot-cli/utr --help
+utr --help
 ```
 
 
@@ -53,9 +53,9 @@ The tool supports several commands using subcommands. The commands support all [
 
 Examples:
 
-    ./utr --help
-    ./utr get --help
-    ./utr get monitors --help
+    utr --help
+    utr get --help
+    utr get monitors --help
 
 
 ### Global Options
@@ -74,26 +74,26 @@ Examples:
 Retrieve information from UptimeRobot. Available resources:
 
 - **account**  
-  Run `./utr get account` to display account details, including monitor usage, SMS credits, and rate limits.
+  Run `utr get account` to display account details, including monitor usage, SMS credits, and rate limits.
 
 - **monitors**  
-  Run `./utr get monitors [--output=yaml|table] [--lengthy]` to list monitors with details like friendly name, URL, type, and more. Use `--output` to choose the format (default is `table`) and `--lengthy` for extended information (only for table output).
+  Run `utr get monitors [--output=yaml|table] [--lengthy]` to list monitors with details like friendly name, URL, type, and more. Use `--output` to choose the format (default is `table`) and `--lengthy` for extended information (only for table output).
 
 - **alert_contacts**  
-  Run `./utr get alert_contacts [--output=yaml|table] [--lengthy]` to retrieve and display alert contact information.
+  Run `utr get alert_contacts [--output=yaml|table] [--lengthy]` to retrieve and display alert contact information.
 
 - **mwindows**  
-  Run `./utr get mwindows [--output=yaml|table] [--lengthy]` to list maintenance windows with start time, end time, duration, and status.
+  Run `utr get mwindows [--output=yaml|table] [--lengthy]` to list maintenance windows with start time, end time, duration, and status.
 
 - **psps**  
-  Run `./utr get psps [--output=yaml|table] [--lengthy]` *(Note: This resource is currently not implemented.)*
+  Run `utr get psps [--output=yaml|table] [--lengthy]` *(Note: This resource is currently not implemented.)*
 
 
 #### 2. `apply`
 
 Apply changes defined in a YAML file to your UptimeRobot account. This command processes your YAML definitions for monitors, maintenance windows, and alert contacts, and performs create, update, or delete actions accordingly.
 
-Run `./utr apply /path/to/config.yaml` where the YAML file should contain definitions for:
+Run `utr apply /path/to/config.yaml` where the YAML file should contain definitions for:
 - `monitors`
 - `mwindows`
 - `alert_contacts`
@@ -106,7 +106,7 @@ Run `./utr apply /path/to/config.yaml` where the YAML file should contain defini
 
 Update data for a specific resource from the command line. Currently, this command supports updating monitors.
 
-Run `./utr set monitors [--field=value ...]`  
+Run `utr set monitors [--field=value ...]`  
 Additional filtering options can be passed as `--field=value` parameters to target specific monitors.
 
 *Other resources (`account`, `alert_contacts`, `mwindows`, `psps`) are marked as "todo" and are not yet implemented.*
@@ -120,30 +120,30 @@ For the documentation of the YAML format used by the UptimeRobot CLI, please ref
 ## Usage examples
 
 - **Retrieve Account Details:**  
-  `./utr get account --api_key YOUR_API_KEY`
+  `utr get account --api_key YOUR_API_KEY`
 
 - **List Monitors containing "example" (within `url` or `friendly_name`), in a brief table format:**  
-  `./utr get monitors --output=table --search=example --api_key YOUR_API_KEY`
+  `utr get monitors --output=table --search=example --api_key YOUR_API_KEY`
 
 - **List some specific Monitors in YAML Format:**  
-  `./utr get monitors  --types=keyw --http_request_details=true --output=yaml`
+  `utr get monitors  --types=keyw --http_request_details=true --output=yaml`
 
 - **Get all monitors with type 2, 4 and 5:**  
-  `./utr get monitors --types=2-4-5`
+  `utr get monitors --types=2-4-5`
 
 - **The same using user-friendly parameter values:**  
-  `./utr get monitors --types=keyw-port-beat --statuses=paused-down`
+  `utr get monitors --types=keyw-port-beat --statuses=paused-down`
 
 - **Apply Changes from a YAML File:**  
-  `./utr apply /home/admin/uptime_config.yaml`
+  `utr apply /home/admin/uptime_config.yaml`
 
 - **Bulk update monitors using command-line options - pausing and resuming some monitors at once:**  
-  `./utr set monitors --search=example --status=paused`
-  `./utr set monitors --search=example --status=up`
+  `utr set monitors --search=example --status=paused`
+  `utr set monitors --search=example --status=up`
 
 - **Bulk update all status pages**
-  `./utr set psps --status=paused`
-  `./utr set psps --status=active`
+  `utr set psps --status=paused`
+  `utr set psps --status=active`
 
 
 ## Troubleshooting & Notes

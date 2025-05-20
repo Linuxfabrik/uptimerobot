@@ -1,7 +1,7 @@
 [build-system]
 # In setuptools before version 61.0.0 there is no support for writing the
 # project's packaging metadata in pyproject.toml
-requires = ["setuptools>=61", "wheel"]
+requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -33,16 +33,27 @@ classifiers = [
     "Topic :: System :: Monitoring",
     "Topic :: System :: Networking :: Monitoring",
 ]
-keywords = ["cli", "uptimerobot", "uptimerobot-api", "monitoring"]
-dependencies = [
-    "linuxfabrik-lib",
-    "pyyaml",
+dynamic = [
+    "dependencies",
 ]
+keywords = ["cli", "uptimerobot", "uptimerobot-api", "monitoring"]
 requires-python = ">=3.9"
 
 [project.urls]
-Homepage = "https://github.com/Linuxfabrik/uptimerobot"
 Documentation = "https://github.com/Linuxfabrik/uptimerobot/blob/master/README.md"
+Download = "https://github.com/Linuxfabrik/uptimerobot/releases"
+Homepage = "https://github.com/Linuxfabrik/uptimerobot"
 Source = "https://github.com/Linuxfabrik/uptimerobot"
 Tracker = "https://github.com/Linuxfabrik/uptimerobot/issues"
-Download = "https://github.com/Linuxfabrik/uptimerobot/releases"
+
+[project.scripts]
+utr = "uptimerobot_cli.utr:main"
+
+[tool.pip-tools]
+generate-hashes = true
+
+[tool.setuptools.dynamic]
+dependencies = { file = "requirements.in" }
+
+[tool.setuptools.packages.find]
+where = ["src"]

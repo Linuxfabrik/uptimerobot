@@ -86,7 +86,7 @@ Retrieve information from UptimeRobot. Available resources:
   Run `utr get mwindows [--output=yaml|table] [--lengthy]` to list maintenance windows with start time, end time, duration, and status.
 
 - **psps**  
-  Run `utr get psps [--output=yaml|table] [--lengthy]` *(Note: This resource is currently not implemented.)*
+  Run `utr get psps [--output=yaml|table] [--lengthy]`
 
 
 #### 2. `apply`
@@ -97,7 +97,7 @@ Run `utr apply /path/to/config.yaml` where the YAML file should contain definiti
 - `monitors`
 - `mwindows`
 - `alert_contacts`
-- `psps` *(currently not implemented)*
+- `psps`
 
 *The tool will automatically convert user-friendly values to the appropriate UptimeRobot API format.*
 

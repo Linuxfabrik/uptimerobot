@@ -26,8 +26,8 @@
 
 ## Prerequisites
 
-- **Python 3:**  
-  Ensure you have Python 3 installed on your system.
+- **Python 3 development package:**  
+  Ensure you have `python3-devel` (RHEL/Fedora) or `python3-dev` (Debian/Ubuntu) installed on your system.
 
 - **UptimeRobot API Key:**  
   You need a valid UptimeRobot API key. You can provide it directly via the command line using `--api_key` or store it in a file (default: `~/.uptimerobot`) and reference it with `--api_key_file` (default: `~/.uptimerobot`.

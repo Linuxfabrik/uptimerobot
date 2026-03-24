@@ -38,7 +38,16 @@
 
 ## Installation
 
+Using [uv](https://docs.astral.sh/uv/) (recommended):
+
+```bash
+uv tool install uptimerobot-cli
+utr --help
 ```
+
+Using pip:
+
+```bash
 pip install uptimerobot-cli
 utr --help
 ```
